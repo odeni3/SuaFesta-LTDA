@@ -1,8 +1,9 @@
 import './HomeIntro.css';
 import '../../assets/example.webp'
-import exemploImg from '../../assets/example.webp';
 import exampleImg2 from '../../assets/example2.webp';
 import exampleImg3 from '../../assets/example3.webp';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 
 function HomeIntro() {
@@ -10,15 +11,6 @@ function HomeIntro() {
     { nome: 'Espaço Encantado', nota: 4.9, comentario: 'Lugar incrível e equipe maravilhosa!' },
     { nome: 'Buffet Delícias', nota: 4.7, comentario: 'Comida excelente e bem servida!' },
     { nome: 'RecreaKids', nota: 5.0, comentario: 'As crianças amaram, super animado!' },
-  ];
-
-  const mockEspacos = [
-    { nome: 'Casa de Festas Jardim', local: 'Recife, PE', nota: 4.9, avaliacoes: 102, preco: 'R$2.500', imagem: exemploImg },
-    { nome: 'Villa Encanto', local: 'Olinda, PE', nota: 4.8, avaliacoes: 87, preco: 'R$3.000', imagem: exemploImg },
-    { nome: 'Espaço Luar', local: 'Jaboatão, PE', nota: 5.0, avaliacoes: 110, preco: 'R$3.800', imagem: exemploImg },
-    { nome: 'Celeiro Eventos', local: 'Guabiraba, PE', nota: 5.0, avaliacoes: 220, preco: 'R$5.000', imagem: exemploImg },
-    { nome: 'Socorro Eventos', local: 'Jaboatão, PE', nota: 5.0, avaliacoes: 110, preco: 'R$3.800', imagem: exemploImg },
-    { nome: 'Espaço Luar', local: 'Recife, PE', nota: 5.0, avaliacoes: 110, preco: 'R$3.800', imagem: exemploImg },
   ];
 
   const mockBuffets = [
@@ -32,6 +24,18 @@ function HomeIntro() {
     { nome: 'Turma da Alegria', tipo: 'Personagens e brincadeiras', nota: 4.8, imagem: exampleImg3 },
     { nome: 'Show do Pipoca', tipo: 'Palhaço e mágica', nota: 4.7, imagem: exampleImg3 },
   ];
+
+  const [espacos, setEspacos] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8001/espacos')
+      .then((res) => {
+        setEspacos(res.data);
+      })
+      .catch((err) => {
+        console.error('Erro ao buscar espaços:', err);
+      });
+  }, []);
 
   return (
     <div className="home-intro">
@@ -77,13 +81,15 @@ function HomeIntro() {
       <section className="carrossel">
         <h2>Espaços para eventos</h2>
         <div className="rolagem-horizontal">
-          {mockEspacos.map((espaco, i) => (
+          {espacos.map((espaco, i) => (
             <div className="card-listagem" key={i}>
-              <img src={espaco.imagem} alt={espaco.nome} />
+              <img src={espaco.fotos[0]} alt={espaco.nome} />
               <h3>{espaco.nome}</h3>
-              <p>{espaco.local}</p>
-              <p>⭐ {espaco.nota} ({espaco.avaliacoes} avaliações)</p>
-              <p>A partir de {espaco.preco}</p>
+              <p>{espaco.localizacao}</p>
+              {/* Esses campos a seguir você pode adaptar se quiser exibir nota e avaliações futuramente */}
+              <p>Telefone: {espaco.telefone}</p>
+              <p>Email: {espaco.email}</p>
+              <p>{espaco.faixa_preco ? `A partir de ${espaco.faixa_preco}` : ''}</p>
             </div>
           ))}
         </div>

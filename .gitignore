@@ -1,0 +1,17 @@
+# Firebase key
+firebase_key.json
+
+# Ambientes virtuais (Python)
+venv/
+.env
+
+# Arquivos de sistema
+__pycache__/
+*.pyc
+
+# VS Code settings (opcional)
+.vscode/
+
+# Arquivos de sistema do Windows/macOS
+Thumbs.db
+.DS_Store
